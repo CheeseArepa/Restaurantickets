@@ -51,3 +51,12 @@ combos: dict[int, dict] = {}
 pedidos: dict[int, dict] = {}
 estadisticas_dia: dict[int, dict] = {}
 fila: list[int] = []
+
+# 4. Funciones
+
+# Reiniciar datos
+def reiniciar_datos()
+    combos.clear()
+    pedidos.clear()
+    estadisticas_dia.clear()
+    fila.clear()

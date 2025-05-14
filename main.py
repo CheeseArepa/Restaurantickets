@@ -75,3 +75,10 @@ combos: dict[int, dict] = {
 pedidos: dict[int, dict] = {}
 estatisticas_dia: dict[int, dict] = {}
 fila: list[int] = []
+
+# 4. Funciones
+# Esta función limpia los pedidos, estadísticas y fila sin tocar combos ni descuento
+def reiniciar_datos():
+    pedidos.clear() # elimina todos los pedidos almacenados
+    estatisticas_dia.clear() # borra las estadísticas acumuladas del día
+    fila.clear() # vacía la lista de IDs en la fila de preparación

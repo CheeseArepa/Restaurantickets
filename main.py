@@ -64,6 +64,14 @@ def reiniciar_datos():
     fila.clear()
     print("Datos reiniciados correctamente.")
 
+def listar_combos():
+    """
+    Muestra los combos disponibles con id, nombre, precio y tiempo de preparación.
+    """
+    print("\n--- Combos disponibles ---")
+    for c in combos.values():
+        print(f"ID: {c['id_combo']}, Nombre: {c['nombre']}, Precio: {c['precio']:.2f} pesos, Tiempo: {c['tiempo_preparacion']} min")
+
 
 def mostrar_menu() -> int:
     """

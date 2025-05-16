@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 
 # 1. Definición de las plantillas para los diccionarios
 
@@ -54,6 +54,9 @@ pedidos: dict[int, dict] = {}
 estadisticas_dia: dict[int, dict] = {}
 fila: list[int] = []
 
+global id_pedido_counter
+id_pedido_counter = 0
+
 # 4. Funciones
 def reiniciar_datos():
     """
@@ -99,3 +102,35 @@ def mostrar_menu() -> int:
     print("5. Salir")
     print("============================\n")
     return leer_entero("Seleccione una opción (1-5): ", minimo=1, maximo=5)
+
+def generar_id_pedido():
+    """Genera un ID único incremental."""
+    global id_pedido_counter
+    id_pedido_counter += 1
+    return id_pedido_counter
+
+
+def calcular_descuento(subtotal: float) -> float:
+    """Calcula descuento si aplica."""
+    if descuento.get("activo") and subtotal >= descuento.get("tope_descuento", float('inf')):
+        return subtotal * descuento.get("porcentaje_descuento", 0)
+    return 0.0
+
+def crear_pedido():
+    """Solicita combo y cantidad, calcula subtotal, ID y timestamp."""
+    listar_combos()
+    # Selección combo
+    while True:
+        id_combo = leer_entero("Ingrese el ID del combo: ")
+        if id_combo in combos:
+            break
+        print("ID inválido. Intente de nuevo.")
+    cantidad = leer_entero("Cantidad de unidades: ", minimo=1)
+    combo = combos[id_combo]
+    subtotal = combo['precio'] * cantidad
+    monto_desc = calcular_descuento(subtotal)
+    total = subtotal - monto_desc
+    nuevo_id = generar_id_pedido()
+    marca_tiempo = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    detalle = {**plantilla_detalle, 'id_combo': id_combo, 'cantidad': cantidad}
+    return nuevo_id, detalle, subtotal, monto_desc, total, marca_tiempo

@@ -72,6 +72,20 @@ def listar_combos():
     for c in combos.values():
         print(f"ID: {c['id_combo']}, Nombre: {c['nombre']}, Precio: {c['precio']:.2f} pesos, Tiempo: {c['tiempo_preparacion']} min")
 
+def leer_entero(prompt: str, minimo: int = None, maximo: int = None) -> int:
+    """
+    Lee un entero, repitiendo hasta que el usuario ingrese un número válido
+    y opcionalmente dentro de un rango especificado.
+    """
+    while True:
+        try:
+            valor = int(input(prompt))
+            if (minimo is not None and valor < minimo) or (maximo is not None and valor > maximo):
+                print("Número fuera de rango. Intenta de nuevo.")
+            else:
+                return valor
+        except ValueError:
+            print("Entrada no válida. Debes ingresar un número entero.")
 
 def mostrar_menu() -> int:
     """
@@ -84,12 +98,4 @@ def mostrar_menu() -> int:
     print("4. Reiniciar datos")
     print("5. Salir")
     print("============================\n")
-    
-    while True:
-        try:
-            opcion = int(input("Seleccione una opción (1-5): "))
-            if 1 <= opcion <= 5:
-                return opcion
-            print("Por favor, ingrese un número entre 1 y 5.")
-        except ValueError:
-            print("Entrada no válida. Debe ingresar un número.")
+    return leer_entero("Seleccione una opción (1-5): ", minimo=1, maximo=5)

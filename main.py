@@ -231,3 +231,29 @@ def ver_estadisticas():
             nombre = combos[combo_id]['nombre']
             print(f"  - {nombre} (ID {combo_id}): {qty} unidades")
         print()
+def main():
+    """Ciclo principal del programa."""
+    while True:
+        opcion = mostrar_menu()
+        if opcion == 1:
+            # Registrar orden: crear, añadir a cola, calcular y guardar
+            nuevo_id, detalle, sub, desc_monto, tot, marca = crear_pedido()
+            añadir_a_cola(nuevo_id)
+            te = calcular_tiempo_estimado()
+            guardar_pedido(nuevo_id, detalle, sub, desc_monto, tot, te, marca)
+        elif opcion == 2:
+            # Ver fila activa
+            ver_fila_activa()
+        elif opcion == 3:
+            # Ver estadísticas del día
+            ver_estadisticas()
+        elif opcion == 4:
+            # Reiniciar todos los datos
+            reiniciar_datos()
+        elif opcion == 5:
+            # Salir del programa
+            print("Saliendo. ¡Hasta luego!")
+            break
+
+if __name__ == "__main__":
+    main()

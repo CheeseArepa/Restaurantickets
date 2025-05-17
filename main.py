@@ -138,3 +138,12 @@ def crear_pedido():
 def añadir_a_cola(id_pedido: int):
     """Inserta el pedido en la cola y marca estado."""
     fila.append(id_pedido)
+
+def calcular_tiempo_estimado():
+    """Suma tiempos de preparación de todos los pedidos en fila."""
+    total_min = 0
+    for pid in fila:
+        pedido = pedidos.get(pid)
+        if pedido:
+            total_min += pedido['tiempo_estimado']
+    return total_min

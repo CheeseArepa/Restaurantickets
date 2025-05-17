@@ -134,3 +134,7 @@ def crear_pedido():
     marca_tiempo = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     detalle = {**plantilla_detalle, 'id_combo': id_combo, 'cantidad': cantidad}
     return nuevo_id, detalle, subtotal, monto_desc, total, marca_tiempo
+
+def añadir_a_cola(id_pedido: int):
+    """Inserta el pedido en la cola y marca estado."""
+    fila.append(id_pedido)

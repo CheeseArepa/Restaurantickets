@@ -163,6 +163,25 @@ def guardar_pedido(id_pedido, detalle, subtotal, descuento_monto, total, tiempo_
     }
     pedidos[id_pedido] = pedido
 
+    hoy = date.today().isoformat()
+
+    est = estadisticas_dia.get(1)
+    if est is None or est['fecha'] != hoy:
+
+        est = {
+            **plantilla_estadistica,
+            'id_estadistica': 1,
+            'fecha': hoy,
+            'por_combo': {}
+        }
+    est['total_pedidos'] += 1
+    est['total_dinero'] += total
+    cid = detalle['id_combo']
+    cantidad = detalle['cantidad']
+    est['por_combo'][cid] = est['por_combo'].get(cid, 0) + cantidad
+    estadisticas_dia[1] = est
+
+
 def ver_fila_activa():
     """
     Muestra los pedidos en la cola con:
@@ -189,3 +208,26 @@ def ver_fila_activa():
 
     # Tiempo total para todos los pedidos
     print(f"\nTiempo total acumulado para la fila: {acumulado} min\n")
+
+def ver_estadisticas():
+    """
+    Muestra estadísticas del día:
+        - Total de dinero recaudado
+        - Total de pedidos realizados
+        - Ventas por combo
+    """
+    if not estadisticas_dia:
+        print("\nNo hay estadísticas registradas aún.\n")
+        return
+
+        # Asumimos un único registro por día (id_estadistica 1)
+        est = estadisticas_dia.get(1)
+        print("\n--- Estadísticas del Día ---")
+        print(f"Fecha: {est['fecha']}")
+        print(f"Total dinero recaudado: {est['total_dinero']:.2f} pesos")
+        print(f"Total pedidos: {est['total_pedidos']}")
+        print("Ventas por combo:")
+        for combo_id, qty in est['por_combo'].items():
+            nombre = combos[combo_id]['nombre']
+            print(f"  - {nombre} (ID {combo_id}): {qty} unidades")
+        print()

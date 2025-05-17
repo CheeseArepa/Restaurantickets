@@ -256,4 +256,12 @@ def main():
             break
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        # Captura Ctrl+C y sale limpiamente
+        print("\nPrograma interrumpido por el usuario. Saliendo.")
+    except Exception as e:
+        # Captura cualquier otra excepción no gestionada
+        print(f"\nHa ocurrido un error inesperado: {e}")
+        print("Por favor, contacte al administrador o intente de nuevo.")

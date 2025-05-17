@@ -147,3 +147,19 @@ def calcular_tiempo_estimado():
         if pedido:
             total_min += pedido['tiempo_estimado']
     return total_min
+
+def guardar_pedido(id_pedido, detalle, subtotal, descuento_monto, total, tiempo_estimado, marca_tiempo):
+    """Guarda el pedido completo en el dict pedidos y actualiza estadísticas."""
+    pedido = {
+        **plantilla_pedido,
+        'id_pedido': id_pedido,
+        'detalles': [detalle],
+        'subtotal': subtotal,
+        'descuento': descuento_monto,
+        'total': total,
+        'tiempo_estimado': tiempo_estimado,
+        'estado': 'en cola',
+        'marca_tiempo': marca_tiempo
+    }
+    pedidos[id_pedido] = pedido
+

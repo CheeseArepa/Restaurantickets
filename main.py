@@ -163,3 +163,29 @@ def guardar_pedido(id_pedido, detalle, subtotal, descuento_monto, total, tiempo_
     }
     pedidos[id_pedido] = pedido
 
+def ver_fila_activa():
+    """
+    Muestra los pedidos en la cola con:
+      - ID de pedido
+      - Tiempo estimado individual
+      - Tiempo acumulado hasta ese pedido
+    Al final muestra el tiempo acumulado total.
+    """
+    if not fila:
+        print("\nLa fila está vacía.\n")
+        return
+
+    print("\n--- Fila de Pedidos Activa ---")
+    acumulado = 0
+    for pid in fila:
+        pedido = pedidos.get(pid)
+        if pedido is None:
+            # Si hubiera inconsistencia, la saltamos
+            continue
+        te = pedido['tiempo_estimado']
+        acumulado += te
+        # Mostrar ID, tiempo estimado y acumulado hasta este pedido
+        print(f"Pedido {pid}: Tiempo estimado = {te} min, Acumulado = {acumulado} min")
+
+    # Tiempo total para todos los pedidos
+    print(f"\nTiempo total acumulado para la fila: {acumulado} min\n")

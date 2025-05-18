@@ -133,7 +133,8 @@ def crear_pedido():
     nuevo_id = generar_id_pedido()
     marca_tiempo = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     detalle = {**plantilla_detalle, 'id_combo': id_combo, 'cantidad': cantidad}
-    return nuevo_id, detalle, subtotal, monto_desc, total, marca_tiempo
+    tiempo_individual = combo['tiempo_preparacion'] * cantidad
+    return nuevo_id, detalle, subtotal, monto_desc, total, marca_tiempo, tiempo_individual
 
 def añadir_a_cola(id_pedido: int):
     """Inserta el pedido en la cola y marca estado."""
@@ -199,11 +200,9 @@ def ver_fila_activa():
     for pid in fila:
         pedido = pedidos.get(pid)
         if pedido is None:
-            # Si hubiera inconsistencia, la saltamos
             continue
         te = pedido['tiempo_estimado']
         acumulado += te
-        # Mostrar ID, tiempo estimado y acumulado hasta este pedido
         print(f"Pedido {pid}: Tiempo estimado = {te} min, Acumulado = {acumulado} min")
 
     # Tiempo total para todos los pedidos
@@ -220,27 +219,27 @@ def ver_estadisticas():
         print("\nNo hay estadísticas registradas aún.\n")
         return
 
-        # Asumimos un único registro por día (id_estadistica 1)
-        est = estadisticas_dia.get(1)
-        print("\n--- Estadísticas del Día ---")
-        print(f"Fecha: {est['fecha']}")
-        print(f"Total dinero recaudado: {est['total_dinero']:.2f} pesos")
-        print(f"Total pedidos: {est['total_pedidos']}")
-        print("Ventas por combo:")
-        for combo_id, qty in est['por_combo'].items():
-            nombre = combos[combo_id]['nombre']
-            print(f"  - {nombre} (ID {combo_id}): {qty} unidades")
-        print()
+    # Asumimos un único registro por día (id_estadistica 1)
+    est = estadisticas_dia.get(1)
+    print("\n--- Estadísticas del Día ---")
+    print(f"Fecha: {est['fecha']}")
+    print(f"Total dinero recaudado: {est['total_dinero']:.2f} pesos")
+    print(f"Total pedidos: {est['total_pedidos']}")
+    print("Ventas por combo:")
+    for combo_id, qty in est['por_combo'].items():
+        nombre = combos[combo_id]['nombre']
+        print(f"  - {nombre} (ID {combo_id}): {qty} unidades")
+    print()
+
 def main():
     """Ciclo principal del programa."""
     while True:
         opcion = mostrar_menu()
         if opcion == 1:
             # Registrar orden: crear, añadir a cola, calcular y guardar
-            nuevo_id, detalle, sub, desc_monto, tot, marca = crear_pedido()
+            nuevo_id, detalle, sub, desc_monto, tot, marca, tiempo_ind = crear_pedido()
             añadir_a_cola(nuevo_id)
-            te = calcular_tiempo_estimado()
-            guardar_pedido(nuevo_id, detalle, sub, desc_monto, tot, te, marca)
+            guardar_pedido(nuevo_id, detalle, sub, desc_monto, tot, tiempo_ind, marca)
         elif opcion == 2:
             # Ver fila activa
             ver_fila_activa()
